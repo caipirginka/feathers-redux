@@ -93,12 +93,18 @@ const reduxifyService = (app, route, name = route, options = {}) => {
     removePending: 'removePending'
   };
 
-  const queryResultDefaults = {
+  //Assume pagination is not used. Without this the "queryResult" field inside the store will be an Object
+  //before a find() was issued and an Array afterwise, making it impossible to get a single Observable out of it,
+  //since the select() path will be different:
+  //  select(["servicename","queryResult","data"] vs select(["servicename","queryResult"]
+  //This is only a workaround and raw FeathersJS service options should be taken into account...
+  /* const queryResultDefaults = {
     total: 0,
     limit: 0,
     skip: 0,
     data: []
-  };
+  }; */
+  const queryResultDefaults = [];
 
   const opts = Object.assign({}, defaults, pendingDefaults, options);
 
